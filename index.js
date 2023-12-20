@@ -30,7 +30,7 @@ nextButton.addEventListener('click', () => {
 
 
 // States
-const maxPage = 48;
+let maxPage = 1;
 let page = 1;
 const searchQuery = "";
 
@@ -40,6 +40,9 @@ async function fetchCharacters() {
     const response = await fetch(`${characterURL}?page=${page}`);
     console.log("page-url", `${characterURL}?page=${page}`)
     const data = await response.json();
+    //console.log("data", data);
+    maxPage = data.info.pages;
+    //console.log("mPage", mPage);
     const characters = data.results;
     //console.log("Charaters", characters);
 
@@ -50,6 +53,8 @@ async function fetchCharacters() {
       cardContainer.appendChild(card);
       //console.log("Card aus dem forEach", card);
     });
+
+    pagination.innerHTML = `${page} / ${maxPage}`
 
   } catch (error) {
     console.error(error)
