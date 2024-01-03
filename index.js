@@ -10,8 +10,12 @@ const prevButton = document.querySelector('[data-js="button-prev"]');
 const nextButton = document.querySelector('[data-js="button-next"]');
 const pagination = document.querySelector('[data-js="pagination"]');
 
-
 const characterURL = 'https://rickandmortyapi.com/api/character';
+
+// States
+let maxPage = 42;
+let page = 1;
+let searchQuery = "";
 
 prevButton.addEventListener('click', () => {
   if (page > 1) {
@@ -29,36 +33,24 @@ nextButton.addEventListener('click', () => {
   }
 });
 
-// States
-let maxPage = 1;
-let page = 1;
-let searchQuery = "";
-
-
 searchBar.addEventListener('submit', (event) => {
   event.preventDefault();
   const inputText = document.getElementById('inputText');
-//  console.log("inputext.value", inputText.value);
-//  console.log("inputext", inputText);
+  //console.log("inputext.value", inputText.value);
+  //console.log("inputext", inputText);
   searchQuery = inputText.value;
-//  console.log("inputText-let-variable", searchQuery)
-  page = 1; // Reset page index when performing a new search
-  fetchCharacters(false);
+  //console.log("inputText-let-variable", searchQuery)
+  page = 1;
+  fetchCharacters();
 });
 
-async function fetchCharacters(bool) {
+async function fetchCharacters() {
 
   try {
-    let response = null;
-    if (!bool) {      
-//      console.log("ich bin im if")
-      response = await fetch(`${characterURL}?name=${searchQuery}`);
-    } else {
-      response = await fetch(`${characterURL}?page=${page}`);
-    }   
-//    console.log("page-url", `${characterURL}?page=${page}`)
+    const response = await fetch(`${characterURL}?page=${page}&name=${searchQuery}`);
+    //console.log("page-url", `${characterURL}?page=${page}`)
     const data = await response.json();
-    //console.log("data", data);
+    console.log("data", data);
     maxPage = data.info.pages;
     //console.log("maxPage", maxPage);
     const characters = data.results;
